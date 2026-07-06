@@ -18,7 +18,17 @@ Point it at the backend with `VITE_API_URL` in `.env` (defaults to `http://local
 npm run dev        # dev server
 npm run build      # type-check + production build to dist/
 npm run preview    # serve the production build
+npm run test       # run the Vitest suite once
+npm run test:watch # watch mode
 ```
+
+## Tests
+
+Vitest + Testing Library in a jsdom environment (`vitest.config.ts`, setup in `src/test/`).
+Covered: the voting math (`lib/voting`), class + avatar helpers (`lib/utils`), the persisted
+auth store (`store/auth`), brand/socket constants and invite links (`constants`), and a `Button`
+component smoke test. Test files (`*.test.ts[x]`) live next to the code they cover and are
+excluded from the production `tsc` build.
 
 ## Layout
 

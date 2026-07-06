@@ -48,3 +48,27 @@ secret.
 go build ./...
 go vet ./...
 ```
+
+## Tests
+
+```bash
+go test ./...            # unit tests everywhere; DB-backed tests skip if no Mongo
+go test ./... -race      # same, with the race detector (as CI runs it)
+```
+
+Two layers of coverage:
+
+- **Unit tests** (always run, no dependencies): the JWT manager (`auth`), env config
+  (`config`), typed errors (`apperr`), the estimation mode catalog (`models`), the realtime
+  event contract (`realtime`), and the room-service helpers (`services`).
+- **Integration tests** (`internal/services/flow_integration_test.go`): drive the real service
+  stack against MongoDB through the full lifecycle (create room, join, create task, private
+  votes, reveal, final decision, plus owner-only and voting-closed guards). They **skip** unless
+  a database is reachable, so a machine without Mongo still passes. Point them at one with:
+
+  ```bash
+  TEST_MONGODB_URI=mongodb://localhost:27017 go test ./internal/services/ -v
+  ```
+
+  `TEST_MONGODB_URI` (falling back to `MONGODB_URI`) is used; each run works in a throwaway
+  database that is dropped on completion. CI runs these against a `mongo:7` service container.

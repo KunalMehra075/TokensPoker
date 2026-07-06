@@ -1,0 +1,34 @@
+# Fly.io deployment config for the FreeTokensPoker Go backend.
+#
+# IMPORTANT: this app runs as a SINGLE instance. Its realtime hub keeps room /
+# vote / presence state in memory with no shared backplane (internal/realtime/hub.go),
+# so a second instance would break live reveals for users on the other machine.
+# Do not add horizontal autoscaling until a Redis pub/sub backplane is added.
+#
+# `app` must be globally unique on Fly; change it if `fly launch` reports it taken.
+app = "freetokenspoker-api"
+primary_region = "iad" # US-East (Ashburn). Serves US + EU well (tool is not latency-sensitive).
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  # WebSockets pass through this service automatically and terminate as wss:// at
+  # the Fly edge. The app listens on 8080 by default and honors $PORT.
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false # keep it always-on (no cold starts)
+  auto_start_machines = true
+  min_machines_running = 1
+  max_machines_running = 1 # hard cap at one instance (in-memory hub requirement)
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/health" # Mongo-independent liveness (internal/handlers/meta_handler.go)
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "10s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
