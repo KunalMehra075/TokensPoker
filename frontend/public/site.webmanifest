@@ -1,0 +1,12 @@
+{
+  "name": "FreeTokensPoker",
+  "short_name": "FreeTokensPoker",
+  "description": "Planning Poker for AI teams. Estimate AI tokens, cost, model choice, and engineering effort together.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
