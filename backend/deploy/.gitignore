@@ -1,0 +1,2 @@
+# Never commit real secrets. Only .env.example belongs in git.
+.env

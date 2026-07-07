@@ -1,0 +1,12 @@
+# Caddy reverse proxy for the backend API + WebSocket hub.
+# Caddy automatically obtains and renews a Let's Encrypt certificate for this
+# domain (ports 80/443 must be open and the domain must resolve to this VM),
+# and proxies WebSocket upgrades to /ws transparently (no extra config needed).
+#
+# Change the domain below to your API host, then reload:
+#   docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile
+
+api.freetokenspoker.com {
+	encode zstd gzip
+	reverse_proxy api:8080
+}

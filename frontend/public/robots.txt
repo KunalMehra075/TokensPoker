@@ -1,7 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /login
 Disallow: /app
 Disallow: /room/
+Disallow: /join/
 Disallow: /history
 
 Sitemap: https://freetokenspoker.com/sitemap.xml
